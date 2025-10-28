@@ -8,6 +8,15 @@ export const get = query({
   },
 });
 
+export const createTask = mutation({
+  args: { name: v.string(), scheduledCompletionTime: v.number(), startTime: v.number() },
+  handler: async (ctx, args) => {
+    const { name, scheduledCompletionTime, startTime } = args;
+
+    await ctx.db.insert("tasks", { title: name, startTime: startTime, children: [], scheduledCompletionTime: scheduledCompletionTime })
+  }
+});
+
 export const setCompleted = mutation({
   args: { id: v.id("tasks"), completed: v.boolean() },
   handler: async (ctx, args) => {

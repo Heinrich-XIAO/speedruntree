@@ -4,7 +4,7 @@ import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
 import { TaskStopwatch } from "../components/TaskStopwatch.tsx"
-import { Archive, Ellipsis, CircleCheck } from 'lucide-react';
+import { Archive, Ellipsis, CircleCheck, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useMutation } from 'convex/react';
 import {
@@ -15,6 +15,9 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
+import { Button } from "@/components/ui/button"
+import { TaskCreationDialog } from "@/components/TaskCreationDialog.tsx"
+import { Dialog, DialogTrigger } from "@/components/ui/dialog"
 
 export default function Home() {
   const tasks = useQuery(api.tasks.get);
@@ -22,16 +25,22 @@ export default function Home() {
   const completedMutation = useMutation(api.tasks.setCompleted);
 
   const archive = (id: string) => {
-    console.log("archived")
     archiveMutation({ id, archive: true })
   }
   const completed = (id: string) => {
-    console.log("completed")
     completedMutation({ id, completed: true })
   }
 
   return (
-    <main className="flex min-h-screen flex-col justify-between p-24 pt-0">
+    <main className="p-24 pt-0">
+      <Dialog>
+        <TaskCreationDialog/>
+        <DialogTrigger asChild>
+          <div className="m-3 flex items-end flex-col">
+            <Plus size={48} className="border-2 rounded-2xl p-1" />
+          </div>
+        </DialogTrigger>
+      </Dialog>
       <div>
         {tasks?.map(({ _id, title, startTime, completedTime }) => {
           return (
