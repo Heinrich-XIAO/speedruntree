@@ -60,7 +60,7 @@ export function TaskCreationDialog() {
           <DialogClose asChild>
             <Button variant="outline">Cancel</Button>
           </DialogClose>
-          <Button type="submit" className="bg-foreground text-background" onClick={taskCreation}>Save changes</Button>
+          <Button type="submit" className="bg-foreground text-background" onClick={taskCreation}>Create Task</Button>
         </DialogFooter>
       </DialogContent>
     </form>
