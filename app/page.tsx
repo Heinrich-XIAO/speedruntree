@@ -33,13 +33,13 @@ export default function Home() {
   return (
     <main className="flex min-h-screen flex-col justify-between p-24 pt-0">
       <div>
-        {tasks?.map(({ _id, title, startTime }) => {
+        {tasks?.map(({ _id, title, startTime, completedTime }) => {
           return (
             <div key={_id} className="w-full p-5 border-2 rounded-2xl m-3 flex justify-between items-start">
               <div>
                 {title}
                 <div>
-                  <TaskStopwatch startTime={startTime} />
+                  <TaskStopwatch startTime={startTime} completedTime={completedTime} />
                 </div>
               </div>
 

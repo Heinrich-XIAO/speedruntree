@@ -3,7 +3,8 @@ import { v } from "convex/values";
 export const get = query({
   args: {},
   handler: async (ctx) => {
-    return await ctx.db.query("tasks").collect();
+    const tasks =  await ctx.db.query("tasks").filter(q => q.eq(q.field("archivedTime"),undefined)).collect();
+    return tasks.sort((a, b) => (a.completedTime ? a.completedTime : 0) - (b.completedTime ? b.completedTime : 0));
   },
 });
 
