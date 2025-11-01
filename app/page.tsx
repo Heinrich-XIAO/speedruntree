@@ -3,8 +3,7 @@
 import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { TaskStopwatch } from "../components/TaskStopwatch"
-import { Archive, Ellipsis, CircleCheck, Plus } from 'lucide-react';
+import { CircleCheck, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useMutation } from 'convex/react';
 import {
@@ -18,7 +17,8 @@ import {
 import { Button } from "@/components/ui/button"
 import { TaskCreationDialog } from "@/components/TaskCreationDialog"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
-import { type Id } from "../convex/_generated/dataModel.js"
+import { type Id, type Doc } from "../convex/_generated/dataModel.js"
+import { Task } from "../components/task"
 
 export default function Home() {
   const tasks = useQuery(api.tasks.get);
@@ -36,26 +36,9 @@ export default function Home() {
     <main className="p-24 pt-0">
       <TaskCreationDialog/>
       <div>
-        {tasks?.map(({ _id, title, startTime, completedTime }) => {
+        {tasks?.map((task: Doc<"tasks">) => {
           return (
-            <div key={_id} className="w-full p-5 border-2 rounded-2xl m-3 flex justify-between items-start">
-              <div>
-                {title}
-                <div>
-                  <TaskStopwatch startTime={startTime} completedTime={completedTime} />
-                </div>
-              </div>
-
-              <div>
-                <DropdownMenu>
-                  <DropdownMenuTrigger><Ellipsis/></DropdownMenuTrigger>
-                  <DropdownMenuContent className="w-4">
-                    <DropdownMenuItem onClick={() => {archive(_id)}}><Archive/>Archive</DropdownMenuItem>
-                    <DropdownMenuItem onClick={() => {completed(_id)}}><CircleCheck/>Completed</DropdownMenuItem>
-                  </DropdownMenuContent>
-                </DropdownMenu>
-              </div>
-            </div>
+            <Task key={task._id} task={task}/>
           );
         })}
       </div>
