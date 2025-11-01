@@ -34,14 +34,7 @@ export default function Home() {
 
   return (
     <main className="p-24 pt-0">
-      <Dialog>
-        <TaskCreationDialog/>
-        <DialogTrigger asChild>
-          <div className="m-3 flex items-end flex-col">
-            <Plus size={48} className="border-2 rounded-2xl p-1" />
-          </div>
-        </DialogTrigger>
-      </Dialog>
+      <TaskCreationDialog/>
       <div>
         {tasks?.map(({ _id, title, startTime, completedTime }) => {
           return (

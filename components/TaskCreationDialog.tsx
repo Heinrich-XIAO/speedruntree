@@ -17,6 +17,7 @@ import { useState } from "react"
 import { api } from "../convex/_generated/api";
 
 export function TaskCreationDialog() {
+  const [isOpen, setIsOpen] = useState(false);
   const [taskName, setTaskName] = useState("Start using speedrun tree");
   const [completionHours, setCompletionHours] = useState(0);
   const [completionMinutes, setCompletionMinutes] = useState(0);
@@ -30,40 +31,48 @@ export function TaskCreationDialog() {
     const completionTime = now + offsetMs;
 
     taskCreationMutation({ name: taskName, scheduledCompletionTime: completionTime, startTime: Date.now() })
+    setIsOpen(false)
   }
   return (
-    <form>
-      <DialogContent className="sm:max-w-[425px]">
-        <DialogHeader>
-          <DialogTitle className="text-xl">Create New Task</DialogTitle>
-        </DialogHeader>
-        <div className="grid gap-4">
-          <div className="grid gap-3">
-            <Label htmlFor="task-name" className="text-base">Task Name</Label>
-            <Input id="task-name" name="name" onChange={(e) => setTaskName(e.target.value)} />
-          </div>
-          <div className="grid gap-3">
-            <Label htmlFor="completion-time" className="text-base">Completion Time Goal</Label>
-            <div className="flex gap-2">
-              <div className="grid gap-1">
-                <Label htmlFor="completion-hours" className="text-sm font-normal">Hours</Label>
-                <Input id="completion-hours" name="completion-hours" type="number" onChange={(e) => setCompletionHours(Number(e.target.value))} value={completionHours} />
-              </div>
-              <div className="grid gap-1">
-                <Label htmlFor="completion-minutes" className="text-sm font-normal">Minutes</Label>
-                <Input id="completion-minutes" name="completion-minutes" type="number" onChange={(e) => setCompletionMinutes(Number(e.target.value))} value={completionMinutes} />
+    <Dialog open={isOpen} onOpenChange={setIsOpen}>
+      <DialogTrigger asChild>
+        <div className="m-3 flex items-end flex-col">
+          <Plus size={48} className="border-2 rounded-2xl p-1" />
+        </div>
+      </DialogTrigger>
+      <form>
+        <DialogContent className="sm:max-w-[425px]">
+          <DialogHeader>
+            <DialogTitle className="text-xl">Create New Task</DialogTitle>
+          </DialogHeader>
+          <div className="grid gap-4">
+            <div className="grid gap-3">
+              <Label htmlFor="task-name" className="text-base">Task Name</Label>
+              <Input id="task-name" name="name" onChange={(e) => setTaskName(e.target.value)} />
+            </div>
+            <div className="grid gap-3">
+              <Label htmlFor="completion-time" className="text-base">Completion Time Goal</Label>
+              <div className="flex gap-2">
+                <div className="grid gap-1">
+                  <Label htmlFor="completion-hours" className="text-sm font-normal">Hours</Label>
+                  <Input id="completion-hours" name="completion-hours" type="number" onChange={(e) => setCompletionHours(Number(e.target.value))} value={completionHours} />
+                </div>
+                <div className="grid gap-1">
+                  <Label htmlFor="completion-minutes" className="text-sm font-normal">Minutes</Label>
+                  <Input id="completion-minutes" name="completion-minutes" type="number" onChange={(e) => setCompletionMinutes(Number(e.target.value))} value={completionMinutes} />
+                </div>
               </div>
             </div>
           </div>
-        </div>
-        <DialogFooter>
-          <DialogClose asChild>
-            <Button variant="outline">Cancel</Button>
-          </DialogClose>
-          <Button type="submit" className="bg-foreground text-background" onClick={taskCreation}>Create Task</Button>
-        </DialogFooter>
-      </DialogContent>
-    </form>
+          <DialogFooter>
+            <DialogClose asChild>
+              <Button variant="outline">Cancel</Button>
+            </DialogClose>
+            <Button type="submit" className="bg-foreground text-background" onClick={taskCreation}>Create Task</Button>
+          </DialogFooter>
+        </DialogContent>
+      </form>
+    </Dialog>
   )
 }
 

@@ -11,9 +11,9 @@ const formatTime = (totalSeconds: number) => {
         .join(":");
 };
 
-export const TaskStopwatch = ({ startTime, completedTime }: { startTime: number | undefined, completedTime: number | undefined }) => {
-    if (!startTime || !completedTime) {
-      return;
+export const TaskStopwatch = ({ startTime, completedTime }: { startTime: number | undefined, completedTime: number }) => {
+    if (!startTime) {
+      return null;
     }
     // State to hold the current elapsed time in milliseconds
     const [elapsedMs, setElapsedMs] = useState(0);
