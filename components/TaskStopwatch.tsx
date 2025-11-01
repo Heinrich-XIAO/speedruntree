@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 
-const formatTime = (totalSeconds) => {
+const formatTime = (totalSeconds: number) => {
     const hours = Math.floor(totalSeconds / 3600);
     const minutes = Math.floor((totalSeconds % 3600) / 60);
     const seconds = Math.floor(totalSeconds % 60);
@@ -11,8 +11,10 @@ const formatTime = (totalSeconds) => {
         .join(":");
 };
 
-
-export const TaskStopwatch = ({ startTime, completedTime }) => {
+export const TaskStopwatch = ({ startTime, completedTime }: { startTime: number | undefined, completedTime: number | undefined }) => {
+    if (!startTime || !completedTime) {
+      return;
+    }
     // State to hold the current elapsed time in milliseconds
     const [elapsedMs, setElapsedMs] = useState(0);
 

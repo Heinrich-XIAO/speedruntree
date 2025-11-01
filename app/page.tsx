@@ -3,7 +3,7 @@
 import Image from "next/image";
 import { useQuery } from "convex/react";
 import { api } from "../convex/_generated/api";
-import { TaskStopwatch } from "../components/TaskStopwatch.tsx"
+import { TaskStopwatch } from "../components/TaskStopwatch"
 import { Archive, Ellipsis, CircleCheck, Plus } from 'lucide-react';
 import { useState } from 'react';
 import { useMutation } from 'convex/react';
@@ -16,18 +16,19 @@ import {
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu"
 import { Button } from "@/components/ui/button"
-import { TaskCreationDialog } from "@/components/TaskCreationDialog.tsx"
+import { TaskCreationDialog } from "@/components/TaskCreationDialog"
 import { Dialog, DialogTrigger } from "@/components/ui/dialog"
+import { type Id } from "../convex/_generated/dataModel.js"
 
 export default function Home() {
   const tasks = useQuery(api.tasks.get);
   const archiveMutation = useMutation(api.tasks.setArchive);
   const completedMutation = useMutation(api.tasks.setCompleted);
 
-  const archive = (id: string) => {
+  const archive = (id: Id<"tasks">) => {
     archiveMutation({ id, archive: true })
   }
-  const completed = (id: string) => {
+  const completed = (id: Id<"tasks">) => {
     completedMutation({ id, completed: true })
   }
 

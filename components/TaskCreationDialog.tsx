@@ -47,11 +47,11 @@ export function TaskCreationDialog() {
             <div className="flex gap-2">
               <div className="grid gap-1">
                 <Label htmlFor="completion-hours" className="text-sm font-normal">Hours</Label>
-                <Input id="completion-hours" name="completion-hours" type="number" onChange={(e) => setCompletionHours(e.target.value)} value={completionHours} />
+                <Input id="completion-hours" name="completion-hours" type="number" onChange={(e) => setCompletionHours(Number(e.target.value))} value={completionHours} />
               </div>
               <div className="grid gap-1">
                 <Label htmlFor="completion-minutes" className="text-sm font-normal">Minutes</Label>
-                <Input id="completion-minutes" name="completion-minutes" type="number" onChange={(e) => setCompletionMinutes(e.target.value)} value={completionMinutes} />
+                <Input id="completion-minutes" name="completion-minutes" type="number" onChange={(e) => setCompletionMinutes(Number(e.target.value))} value={completionMinutes} />
               </div>
             </div>
           </div>
