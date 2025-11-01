@@ -22,15 +22,6 @@ import { Task } from "../components/task"
 
 export default function Home() {
   const tasks = useQuery(api.tasks.get);
-  const archiveMutation = useMutation(api.tasks.setArchive);
-  const completedMutation = useMutation(api.tasks.setCompleted);
-
-  const archive = (id: Id<"tasks">) => {
-    archiveMutation({ id, archive: true })
-  }
-  const completed = (id: Id<"tasks">) => {
-    completedMutation({ id, completed: true })
-  }
 
   return (
     <main className="p-24 pt-0">

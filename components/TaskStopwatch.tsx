@@ -11,7 +11,7 @@ const formatTime = (totalSeconds: number) => {
         .join(":");
 };
 
-export const TaskStopwatch = ({ startTime, completedTime }: { startTime: number | undefined, completedTime: number }) => {
+export const TaskStopwatch = ({ startTime, completedTime }: { startTime: number | undefined, completedTime: number | undefined }) => {
     if (!startTime) {
       return null;
     }
