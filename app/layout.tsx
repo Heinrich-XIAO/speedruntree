@@ -2,6 +2,8 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { ConvexClientProvider } from "./ConvexClientProvider";
+import { ThemeProvider } from "@/components/theme-provider"
+import { ModeToggle } from "../components/mode-toggle"
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -24,20 +26,28 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body
         className={`${geistSans.variable} ${geistMono.variable} antialiased`}
       >
-        <header className="bg-background shadow-md w-full">
-            <div className="container mx-auto px-4 sm:px-6 lg:px-8">
-                <div className="flex items-center justify-between h-16 border-b border-gray-300">
-                    <h1 className="text-2xl font-bold text-foreground">
-                        Speedruntree
-                    </h1>
-                </div>
-            </div>
-        </header>
-        <ConvexClientProvider>{children}</ConvexClientProvider>
+        <ThemeProvider
+          attribute="class"
+          defaultTheme="system"
+          enableSystem
+          disableTransitionOnChange
+        >
+          <header className="bg-background shadow-md w-full">
+              <div className="container mx-auto px-4 sm:px-6 lg:px-8">
+                  <div className="flex items-center justify-between h-16 border-b border-gray-300">
+                      <h1 className="text-2xl font-bold text-foreground">
+                          Speedruntree
+                      </h1>
+                      <ModeToggle/>
+                  </div>
+              </div>
+          </header>
+          <ConvexClientProvider>{children}</ConvexClientProvider>
+        </ThemeProvider>
       </body>
     </html>
   );
