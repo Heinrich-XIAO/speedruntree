@@ -62,7 +62,7 @@ export function TaskCreationDialog({ open, onOpenChange }: { open: boolean; onOp
             <Checkbox
               id="start_now"
               checked={startNow}
-              onCheckedChange={setStartNow}
+              onCheckedChange={checked => setStartNow(checked === true)}
             />
           </div>
 
