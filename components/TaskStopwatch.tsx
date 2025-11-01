@@ -39,7 +39,7 @@ export const TaskStopwatch = ({ startTime, completedTime }: { startTime: number 
       if (completedTime) {
         setElapsedMs(completedTime - startTime);
       }
-    }, [])
+    }, [completedTime])
 
 
     // Convert milliseconds to total seconds for formatting
