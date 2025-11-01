@@ -4,12 +4,21 @@ export const get = query({
   args: {},
   handler: async (ctx) => {
     const tasks =  await ctx.db.query("tasks").filter(q => q.eq(q.field("archivedTime"),undefined)).collect();
-    return tasks.sort((a, b) => (b.startTime - a.startTime)).sort((a, b) => (a.completedTime ? a.completedTime : 0) - (b.completedTime ? b.completedTime : 0));
+    return tasks.sort((a, b) => (b._creationTime - a._creationTime)).sort((a, b) => (a.completedTime ? a.completedTime : 0) - (b.completedTime ? b.completedTime : 0));
   },
 });
 
+export const startSpeedrun = mutation({
+  args: { id: v.id("tasks"), startTime: v.number() },
+  handler: async (ctx, args) => {
+    const { id, startTime } = args;
+
+    await ctx.db.patch(id, { startTime: startTime })
+  }
+})
+
 export const createTask = mutation({
-  args: { name: v.string(), scheduledCompletionTime: v.number(), startTime: v.number() },
+  args: { name: v.string(), scheduledCompletionTime: v.number(), startTime: v.optional(v.number()) },
   handler: async (ctx, args) => {
     const { name, scheduledCompletionTime, startTime } = args;
 

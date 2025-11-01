@@ -15,11 +15,13 @@ import { TaskStopwatch } from "../components/TaskStopwatch"
 import { useMutation } from "convex/react"
 import { api } from "../convex/_generated/api"
 import { type Id } from "../convex/_generated/dataModel"
+import { Button } from "./ui/button"
 
 export const Task = ({ task } : { task: Doc<"tasks"> }) => {
   const { _id, title, startTime, completedTime } = task;
   const archiveMutation = useMutation(api.tasks.setArchive);
   const completedMutation = useMutation(api.tasks.setCompleted);
+  const startSpeedrunMutation = useMutation(api.tasks.startSpeedrun);
 
   const archive = (id: Id<"tasks">) => {
     archiveMutation({ id, archive: true })
@@ -27,13 +29,23 @@ export const Task = ({ task } : { task: Doc<"tasks"> }) => {
   const completed = (id: Id<"tasks">) => {
     completedMutation({ id, completed: true })
   }
+  const startSpeedrun = () => {
+    console.log(_id)
+    startSpeedrunMutation({ id: _id, startTime: Date.now() })
+  }
 
   return (
     <div key={_id} className="w-full p-5 border-2 rounded-2xl m-3 flex justify-between items-start">
       <div>
         {title}
         <div>
-          <TaskStopwatch startTime={startTime} completedTime={completedTime} />
+          {startTime ? (
+            <TaskStopwatch startTime={startTime} completedTime={completedTime} />
+          ) : (
+            <Button className="border-2 bg-background text-foreground mt-2 hover:bg-background" onClick={startSpeedrun}>
+              Start
+            </Button>
+          )}
         </div>
       </div>
       <div>

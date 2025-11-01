@@ -4,7 +4,7 @@ import { v } from "convex/values";
 export default defineSchema({
   tasks: defineTable({
     title: v.string(),
-    startTime: v.number(),
+    startTime: v.optional(v.number()),
     tokenIdentifier: v.optional(v.string()),
     children: v.array(v.id("tasks")),
     archivedTime: v.optional(v.number()),
