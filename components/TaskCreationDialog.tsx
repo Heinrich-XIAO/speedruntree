@@ -35,11 +35,11 @@ export function TaskCreationDialog() {
   }
   return (
     <Dialog open={isOpen} onOpenChange={setIsOpen}>
-      <DialogTrigger asChild>
-        <div className="m-3 flex items-end flex-col">
+      <div className="m-3 flex items-end flex-col">
+        <DialogTrigger asChild>
           <Plus size={48} className="border-2 rounded-2xl p-1" />
-        </div>
-      </DialogTrigger>
+        </DialogTrigger>
+      </div>
       <form>
         <DialogContent className="sm:max-w-[425px]">
           <DialogHeader>
