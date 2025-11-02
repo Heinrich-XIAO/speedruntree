@@ -60,10 +60,18 @@ export default function Home() {
 
       <TaskCreationDialog open={isDialogOpen} onOpenChange={setIsDialogOpen} />
 
-      <div>
-        {filteredTasks?.map((task: Doc<"tasks">) => (
-          <Task key={task._id} task={task} />
-        ))}
+      <div className="mt-6">
+        {tasks === undefined ? (
+          null
+        ) : filteredTasks.length > 0 ? (
+          filteredTasks.map((task: Doc<"tasks">) => (
+            <Task key={task._id} task={task} />
+          ))
+        ) : (
+          <p className="text-center text-muted-foreground mt-12">
+            No tasks found.
+          </p>
+        )}
       </div>
     </main>
   );
