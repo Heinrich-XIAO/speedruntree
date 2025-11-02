@@ -30,8 +30,9 @@ export default function Home() {
 
     for (const statusPart of statusParts) {
       const status = statusPart.split(":")[1];
-      if (status === "ongoing" && task.completedTime) return false;
+      if (status === "ongoing" && (task.completedTime || task.archivedTime)) return false;
       if (status === "completed" && !task.completedTime) return false;
+      if (status === "archived" && !task.archivedTime) return false;
     }
 
     if (searchText) {
