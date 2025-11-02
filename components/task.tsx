@@ -29,8 +29,10 @@ export const Task = ({ task } : { task: Doc<"tasks"> }) => {
   const completed = (id: Id<"tasks">) => {
     completedMutation({ id, completed: true })
   }
+  const temporarilyQuit = () => {
+    startSpeedrunMutation({ id: _id, startTime: undefined })
+  }
   const startSpeedrun = () => {
-    console.log(_id)
     startSpeedrunMutation({ id: _id, startTime: Date.now() })
   }
 
@@ -54,6 +56,7 @@ export const Task = ({ task } : { task: Doc<"tasks"> }) => {
           <DropdownMenuContent className="w-4">
             <DropdownMenuItem onClick={() => {archive(_id)}}><Archive/>Archive</DropdownMenuItem>
             <DropdownMenuItem onClick={() => {completed(_id)}}><CircleCheck/>Completed</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {temporarilyQuit(_id)}}><CircleCheck/>Temporarily Quit</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>

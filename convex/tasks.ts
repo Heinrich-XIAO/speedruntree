@@ -9,7 +9,7 @@ export const get = query({
 });
 
 export const startSpeedrun = mutation({
-  args: { id: v.id("tasks"), startTime: v.number() },
+  args: { id: v.id("tasks"), startTime: v.optional(v.number()) },
   handler: async (ctx, args) => {
     const { id, startTime } = args;
 
