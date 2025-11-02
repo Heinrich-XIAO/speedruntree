@@ -56,7 +56,7 @@ export const Task = ({ task } : { task: Doc<"tasks"> }) => {
           <DropdownMenuContent className="w-4">
             <DropdownMenuItem onClick={() => {archive(_id)}}><Archive/>Archive</DropdownMenuItem>
             <DropdownMenuItem onClick={() => {completed(_id)}}><CircleCheck/>Completed</DropdownMenuItem>
-            <DropdownMenuItem onClick={() => {temporarilyQuit(_id)}}><CircleCheck/>Temporarily Quit</DropdownMenuItem>
+            <DropdownMenuItem onClick={() => {temporarilyQuit()}}><CircleCheck/>Temporarily Quit</DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>
       </div>
