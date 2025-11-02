@@ -12,43 +12,42 @@ import {
   ToggleGroup,
   ToggleGroupItem,
 } from "@/components/ui/toggle-group";
+import { Input } from "@/components/ui/input"
 
 export default function Home() {
   const [isDialogOpen, setIsDialogOpen] = useState(false);
-  const [filter, setFilter] = useState<string[]>(["ongoing"]);
+  const [filter, setFilter] = useState<string>("is:ongoing");
 
   const tasks = useQuery(api.tasks.get);
 
   const filteredTasks = tasks?.filter((task: Doc<"tasks">) => {
-    // if neither or both are selected → show all
-    if (filter.length === 0 || filter.length === 2) return true;
+    console.log(filter)
+    const parts = filter.trim().split(/\s+/);
 
-    // ongoing selected only
-    if (filter.includes("ongoing")) return !task.completedTime;
+    const statusParts = parts.filter((p) => p.startsWith("is:"));
+    const textParts = parts.filter((p) => !p.startsWith("is:"));
+    const searchText = textParts.join(" ").toLowerCase();
 
-    // completed selected only
-    if (filter.includes("completed")) return !!task.completedTime;
+    for (const statusPart of statusParts) {
+      const status = statusPart.split(":")[1];
+      if (status === "ongoing" && task.completedTime) return false;
+      if (status === "completed" && !task.completedTime) return false;
+    }
+
+    if (searchText) {
+      const inTitle = task.title?.toLowerCase().includes(searchText);
+      const inDescription = task.description?.toLowerCase().includes(searchText);
+      if (!inTitle && !inDescription) return false;
+    }
 
     return true;
   });
 
   return (
     <main className="p-24 pt-0">
-      <div className="m-3 flex justify-between items-center">
-        <div className="flex items-start gap-3">
-          <ToggleGroup
-            variant="outline"
-            type="multiple"
-            value={filter}
-            onValueChange={(val) => setFilter(val)}
-          >
-            <ToggleGroupItem value="ongoing" aria-label="Toggle ongoing">
-              Ongoing
-            </ToggleGroupItem>
-            <ToggleGroupItem value="completed" aria-label="Toggle completed">
-              Completed
-            </ToggleGroupItem>
-          </ToggleGroup>
+      <div className="m-3 flex justify-between items-center gap-3">
+        <div className="flex items-start gap-3 w-full">
+          <Input type="text" placeholder="is:ongoing" value={filter} onChange={e => setFilter(e.target.value)} />
         </div>
 
         <Plus
