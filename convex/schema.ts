@@ -10,6 +10,7 @@ export default defineSchema({
     archivedTime: v.optional(v.number()),
     completedTime: v.optional(v.number()),
     scheduledCompletionTime: v.optional(v.number()),
+    creator: v.optional(v.id("users")),
   }).index("by_token", ["tokenIdentifier"]),
   users: defineTable({
     name: v.string(),
