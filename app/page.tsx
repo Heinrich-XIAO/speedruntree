@@ -36,12 +36,11 @@ export default function Home() {
 
     if (searchText) {
       const inTitle = task.title?.toLowerCase().includes(searchText);
-      const inDescription = task.description?.toLowerCase().includes(searchText);
-      if (!inTitle && !inDescription) return false;
+      if (!inTitle) return false;
     }
 
     return true;
-  });
+  }) || [];
 
   return (
     <main className="p-24 pt-0">
