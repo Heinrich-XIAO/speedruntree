@@ -3,9 +3,22 @@ import { v } from "convex/values";
 export const get = query({
   args: {},
   handler: async (ctx) => {
-    const identity = await ctx.auth.getUserIdentity();
-    console.log(identity)
-    const tasks =  await ctx.db.query("tasks").collect();
+    const identityToken = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+
+    if (!identityToken) {
+      return
+    }
+
+    const identity = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identityToken))
+      .unique();
+
+    if (!identity) {
+      return
+    }
+
+    const tasks =  await ctx.db.query("tasks").withIndex("by_author", (q) => q.eq("creator", identity._id)).collect();
     return tasks.sort((a, b) => (b._creationTime - a._creationTime)).sort((a, b) => (a.completedTime ? a.completedTime : 0) - (b.completedTime ? b.completedTime : 0));
   },
 });
@@ -23,8 +36,26 @@ export const createTask = mutation({
   args: { name: v.string(), scheduledCompletionTime: v.number(), startTime: v.optional(v.number()) },
   handler: async (ctx, args) => {
     const { name, scheduledCompletionTime, startTime } = args;
+    const identityToken = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
 
-    await ctx.db.insert("tasks", { title: name, startTime: startTime, children: [], scheduledCompletionTime: scheduledCompletionTime })
+    if (!identityToken) {
+      return
+    }
+
+    const identity = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identityToken))
+      .unique();
+    if (!identity) {
+      return
+    }
+    await ctx.db.insert("tasks", {
+      title: name,
+      startTime,
+      children: [],
+      scheduledCompletionTime,
+      creator: identity._id,
+    });
   }
 });
 

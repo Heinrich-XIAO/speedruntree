@@ -11,7 +11,7 @@ export default defineSchema({
     completedTime: v.optional(v.number()),
     scheduledCompletionTime: v.optional(v.number()),
     creator: v.optional(v.id("users")),
-  }).index("by_token", ["tokenIdentifier"]),
+  }).index("by_token", ["tokenIdentifier"]).index("by_author", ["creator"]),
   users: defineTable({
     name: v.string(),
     tokenIdentifier: v.string(),
