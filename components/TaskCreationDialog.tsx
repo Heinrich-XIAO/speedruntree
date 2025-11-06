@@ -32,6 +32,7 @@ export function TaskCreationDialog({ open, onOpenChange }: { open: boolean; onOp
       name: taskName,
       scheduledCompletionTime: completionTime,
       startTime: startNow ? Date.now() : undefined,
+      visibility: visibility ? "public" : "private",
     });
 
     onOpenChange(false);

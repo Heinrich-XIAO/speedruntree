@@ -4,21 +4,24 @@ export const get = query({
   args: {},
   handler: async (ctx) => {
     const identityToken = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+    const identity = identityToken
+      ? (await ctx.db
+          .query("users")
+          .withIndex("by_token", (q) => q.eq("tokenIdentifier", identityToken))
+          .unique()
+        )?._id || ""
+      : "";
 
-    if (!identityToken) {
-      return
-    }
-
-    const identity = await ctx.db
-      .query("users")
-      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identityToken))
-      .unique();
-
-    if (!identity) {
-      return
-    }
-
-    const tasks =  await ctx.db.query("tasks").withIndex("by_author", (q) => q.eq("creator", identity._id)).collect();
+    const tasks = await ctx.db
+      .query("tasks")
+      .filter((q) =>
+        q.or(
+          q.eq(q.field("creator"), identity),
+          q.eq(q.field("visibility"), "public"),
+          q.eq(q.field("visibility"), undefined),
+        )
+      )
+      .collect();
     return tasks.sort((a, b) => (b._creationTime - a._creationTime)).sort((a, b) => (a.completedTime ? a.completedTime : 0) - (b.completedTime ? b.completedTime : 0));
   },
 });

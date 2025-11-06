@@ -11,10 +11,10 @@ export default defineSchema({
     completedTime: v.optional(v.number()),
     scheduledCompletionTime: v.optional(v.number()),
     creator: v.optional(v.id("users")),
-    visibility: v.union(
+    visibility: v.optional(v.union(
       v.literal("public"),
       v.literal("private"),
-    ),
+    )),
   }).index("by_token", ["tokenIdentifier"]).index("by_author", ["creator"]),
   users: defineTable({
     name: v.string(),
