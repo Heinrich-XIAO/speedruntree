@@ -19,6 +19,7 @@ export function TaskCreationDialog({ open, onOpenChange }: { open: boolean; onOp
   const [completionHours, setCompletionHours] = useState(0);
   const [completionMinutes, setCompletionMinutes] = useState(0);
   const [startNow, setStartNow] = useState(true);
+  const [visibility, setVisibility] = useState(true);
 
   const taskCreationMutation = useMutation(api.tasks.createTask);
 
@@ -62,6 +63,15 @@ export function TaskCreationDialog({ open, onOpenChange }: { open: boolean; onOp
               id="start_now"
               checked={startNow}
               onCheckedChange={checked => setStartNow(checked === true)}
+            />
+          </div>
+
+          <div className="flex gap-3 items-center">
+            <Label htmlFor="visibility">Public?</Label>
+            <Checkbox
+              id="visibility"
+              checked={visibility}
+              onCheckedChange={visibility => setVisibility(visibility === true)}
             />
           </div>
 
