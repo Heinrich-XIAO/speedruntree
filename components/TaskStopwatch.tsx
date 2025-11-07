@@ -40,8 +40,7 @@ export const TaskStopwatch = ({ startTime, completedTime }: { startTime: number 
 
     return (
         <span className={"text-2xl font-mono " + (completedTime ? "text-green-500" : "text-red-600")}>
-            {/*formatTime(totalSeconds) + ":" + (elapsedMs % 1000).toString().padStart(3, '0').slice(0, 2)*/}
-            {formatTime(totalSeconds)}
+            {formatTime(totalSeconds) + "." + (elapsedMs % 1000).toString().padStart(3, '0').slice(0, 1)}
         </span>
     );
 };
