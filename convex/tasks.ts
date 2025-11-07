@@ -31,6 +31,24 @@ export const startSpeedrun = mutation({
   handler: async (ctx, args) => {
     const { id, startTime } = args;
 
+    const identityToken = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
+    if (!identityToken) {
+      return;
+    }
+
+    const identity = await ctx.db
+      .query("users")
+      .withIndex("by_token", (q) => q.eq("tokenIdentifier", identityToken))
+      .unique();
+    if (!identity) {
+      return;
+    }
+
+    const task = await ctx.db.get(id);
+    if (!task || task.creator !== identity._id) {
+      return;
+    }
+
     await ctx.db.patch(id, { startTime: startTime })
   }
 })

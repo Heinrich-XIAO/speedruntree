@@ -78,7 +78,7 @@ export default function Home() {
           null
         ) : filteredTasks.length > 0 ? (
           filteredTasks.map((task: Doc<"tasks">) => (
-            <Task key={task._id} task={task} />
+            <Task key={task._id} task={task} me={me} />
           ))
         ) : (
           <p className="text-center text-muted-foreground mt-12">

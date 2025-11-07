@@ -19,8 +19,8 @@ import { Button } from "./ui/button"
 
 import { Badge } from "./ui/badge";
 
-export const Task = ({ task } : { task: Doc<"tasks"> }) => {
-  const { _id, title, startTime, completedTime, priority } = task;
+export const Task = ({ task, me } : { task: Doc<"tasks">, me: Doc<"users"> | undefined }) => {
+  const { _id, title, startTime, completedTime, priority, creator } = task;
   const archiveMutation = useMutation(api.tasks.setArchive);
   const completedMutation = useMutation(api.tasks.setCompleted);
   const startSpeedrunMutation = useMutation(api.tasks.startSpeedrun);
@@ -49,9 +49,13 @@ export const Task = ({ task } : { task: Doc<"tasks"> }) => {
           {startTime ? (
             <TaskStopwatch startTime={startTime} completedTime={completedTime} />
           ) : (
-            <Button className="border-2 bg-background text-foreground mt-2 hover:bg-background" onClick={startSpeedrun}>
-              Start
-            </Button>
+            me && creator === me._id ? (
+              <Button className="border-2 bg-background text-foreground mt-2 hover:bg-background" onClick={startSpeedrun}>
+                Start
+              </Button>
+            ) : (
+              <p className="text-muted-foreground mt-2">Not started yet</p>
+            )
           )}
         </div>
       </div>
