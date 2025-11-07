@@ -1,46 +1,64 @@
-import React, { useState, useEffect } from 'react';
+"use client";
+import React, { useEffect, useRef } from "react";
 
-const formatTime = (totalSeconds: number) => {
-    const hours = Math.floor(totalSeconds / 3600);
-    const minutes = Math.floor((totalSeconds % 3600) / 60);
-    const seconds = Math.floor(totalSeconds % 60);
+const formatTime = (totalMs: number) => {
+  if (totalMs < 0) totalMs = 0;
 
-    return [hours, minutes, seconds]
-        .map(v => v.toString().padStart(2, '0'))
-        .join(":");
+  const totalSeconds = totalMs / 1000;
+  const hours = Math.floor(totalSeconds / 3600);
+  const minutes = Math.floor((totalSeconds % 3600) / 60);
+  const seconds = Math.floor(totalSeconds % 60);
+  const hundredths = Math.floor((totalMs % 1000) / 10); // 0–99
+
+  return (
+    hours.toString().padStart(2, "0") + ":" +
+    minutes.toString().padStart(2, "0") + ":" +
+    seconds.toString().padStart(2, "0") + "." +
+    hundredths.toString().padStart(2, "0")
+  );
 };
 
-export const TaskStopwatch = ({ startTime, completedTime }: { startTime: number | undefined, completedTime: number | undefined }) => {
-    if (!startTime) {
-      return null;
+export const TaskStopwatch = ({
+  startTime,
+  completedTime,
+}: {
+  startTime: number | undefined;
+  completedTime: number | undefined;
+}) => {
+  if (!startTime) return null;
+
+  const spanRef = useRef<HTMLSpanElement>(null);
+
+  useEffect(() => {
+    if (completedTime) {
+      if (spanRef.current) spanRef.current.textContent = formatTime(completedTime - startTime);
+      return;
     }
-    const [elapsedMs, setElapsedMs] = useState(0);
 
-    useEffect(() => {
-        if (completedTime) return
-        const initialElapsed = Math.max(0, Date.now() - startTime);
-        setElapsedMs(initialElapsed);
+    let frame: number;
 
-        const intervalId = setInterval(() => {
-            const currentElapsed = Math.max(0, Date.now() - startTime);
-            setElapsedMs(currentElapsed);
-        }, 45); 
+    const tick = () => {
+      const elapsed = Date.now() - startTime;
+      if (spanRef.current) spanRef.current.textContent = formatTime(elapsed);
+      frame = requestAnimationFrame(tick);
+    };
 
-        return () => clearInterval(intervalId);
-    }, [startTime]);
+    frame = requestAnimationFrame(tick);
+    return () => cancelAnimationFrame(frame);
+  }, [startTime, completedTime]);
 
-    useEffect(() => {
-      if (completedTime) {
-        setElapsedMs(completedTime - startTime);
+  const initialElapsed = completedTime ? completedTime - startTime : Date.now() - startTime;
+
+  return (
+    <span
+      ref={spanRef}
+      className={
+        "text-2xl font-mono " +
+        (completedTime ? "text-green-500" : "text-red-600")
       }
-    }, [completedTime])
-
-
-    const totalSeconds = elapsedMs / 1000;
-
-    return (
-        <span className={"text-2xl font-mono " + (completedTime ? "text-green-500" : "text-red-600")}>
-            {formatTime(totalSeconds) + "." + (elapsedMs % 1000).toString().padStart(3, '0').slice(0, 1)}
-        </span>
-    );
+    >
+      {formatTime(initialElapsed)}
+    </span>
+  );
 };
+
