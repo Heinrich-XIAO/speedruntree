@@ -17,8 +17,10 @@ import { api } from "../convex/_generated/api"
 import { type Id } from "../convex/_generated/dataModel"
 import { Button } from "./ui/button"
 
+import { Badge } from "./ui/badge";
+
 export const Task = ({ task } : { task: Doc<"tasks"> }) => {
-  const { _id, title, startTime, completedTime } = task;
+  const { _id, title, startTime, completedTime, priority } = task;
   const archiveMutation = useMutation(api.tasks.setArchive);
   const completedMutation = useMutation(api.tasks.setCompleted);
   const startSpeedrunMutation = useMutation(api.tasks.startSpeedrun);
@@ -39,7 +41,10 @@ export const Task = ({ task } : { task: Doc<"tasks"> }) => {
   return (
     <div key={_id} className="w-full p-5 border-2 rounded-2xl m-3 flex justify-between items-start">
       <div>
-        {title}
+        <div className="flex gap-2 items-center">
+          {title}
+          {priority ? <Badge>{priority.toUpperCase()}</Badge> : null}
+        </div>
         <div>
           {startTime ? (
             <TaskStopwatch startTime={startTime} completedTime={completedTime} />

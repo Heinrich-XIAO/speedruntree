@@ -13,6 +13,7 @@ import { useMutation } from "convex/react"
 import { useState } from "react"
 import { api } from "../convex/_generated/api"
 import { Checkbox } from "@/components/ui/checkbox"
+import { ToggleGroup, ToggleGroupItem } from "@/components/ui/toggle-group"
 
 export function TaskCreationDialog({ open, onOpenChange }: { open: boolean; onOpenChange: (value: boolean) => void }) {
   const [taskName, setTaskName] = useState("Start using speedrun tree");
@@ -20,6 +21,7 @@ export function TaskCreationDialog({ open, onOpenChange }: { open: boolean; onOp
   const [completionMinutes, setCompletionMinutes] = useState(0);
   const [startNow, setStartNow] = useState(true);
   const [visibility, setVisibility] = useState(true);
+  const [priority, setPriority] = useState<string | undefined>(undefined)
 
   const taskCreationMutation = useMutation(api.tasks.createTask);
 
@@ -33,6 +35,7 @@ export function TaskCreationDialog({ open, onOpenChange }: { open: boolean; onOp
       scheduledCompletionTime: completionTime,
       startTime: startNow ? Date.now() : undefined,
       visibility: visibility ? "public" : "private",
+      priority,
     });
 
     onOpenChange(false);
@@ -115,6 +118,20 @@ export function TaskCreationDialog({ open, onOpenChange }: { open: boolean; onOp
                 />
               </div>
             </div>
+          </div>
+          <div className="grid gap-3">
+            <Label
+              htmlFor="priority"
+              className="text-base"
+            >
+              Priority
+            </Label>
+            <ToggleGroup onValueChange={setPriority} type="single" variant="outline" className="w-full grid grid-cols-4">
+              <ToggleGroupItem value="p1">P1</ToggleGroupItem>
+              <ToggleGroupItem value="p2">P2</ToggleGroupItem>
+              <ToggleGroupItem value="p3">P3</ToggleGroupItem>
+              <ToggleGroupItem value="p4">P4</ToggleGroupItem>
+            </ToggleGroup>
           </div>
         </div>
 

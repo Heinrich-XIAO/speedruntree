@@ -15,6 +15,7 @@ export default defineSchema({
       v.literal("public"),
       v.literal("private"),
     )),
+    priority: v.optional(v.string()),
   }).index("by_token", ["tokenIdentifier"]).index("by_author", ["creator"]),
   users: defineTable({
     name: v.string(),

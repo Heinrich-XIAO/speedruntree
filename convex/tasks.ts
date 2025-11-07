@@ -36,9 +36,9 @@ export const startSpeedrun = mutation({
 })
 
 export const createTask = mutation({
-  args: { name: v.string(), scheduledCompletionTime: v.number(), startTime: v.optional(v.number()), visibility: v.union(v.literal("public"), v.literal("private")) },
+  args: { name: v.string(), scheduledCompletionTime: v.number(), startTime: v.optional(v.number()), visibility: v.union(v.literal("public"), v.literal("private")), priority: v.optional(v.string()) },
   handler: async (ctx, args) => {
-    const { name, scheduledCompletionTime, startTime, visibility } = args;
+    const { name, scheduledCompletionTime, startTime, visibility, priority } = args;
     const identityToken = (await ctx.auth.getUserIdentity())?.tokenIdentifier;
 
     if (!identityToken) {
@@ -59,6 +59,7 @@ export const createTask = mutation({
       scheduledCompletionTime,
       creator: identity._id,
       visibility: visibility,
+      priority,
     });
   }
 });
