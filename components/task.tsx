@@ -43,7 +43,7 @@ export const Task = ({ task, me } : { task: Doc<"tasks">, me: Doc<"users"> | und
       <div>
         <div className="flex gap-2 items-center">
           {title}
-          {priority ? <Badge>{priority.toUpperCase()}</Badge> : null}
+          {priority ? <Badge variant={priority === "low" ? "low" : priority === "medium" ? "medium" : "high"}>{priority.toUpperCase()}</Badge> : null}
         </div>
         <div>
           {startTime ? (
